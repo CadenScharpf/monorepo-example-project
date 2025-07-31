@@ -3,6 +3,7 @@ ARG NODE_VERSION=22.16.0
 FROM node:${NODE_VERSION}-alpine as base
 RUN npm install pnpm turbo typescript --global
 RUN pnpm config set store-dir ~/.pnpm-store
+RUN pnpm config set strict-ssl false
 
 
 FROM base AS pruner
@@ -37,7 +38,7 @@ ENV PROJECT=${PROJECT}
 WORKDIR /app
 COPY --from=builder --chown=node:node /app .
 #RUN /bin/sh -c 'if [ -d "/app/apps/${PROJECT}/public" ]; then cp -r /app/apps/${PROJECT}/public /app/public; fi'
-RUN npm install -g serve
+#RUN npm install -g serve
 CMD turbo run ${PROJECT}#start --env-mode=loose
 
 FROM base AS dev
