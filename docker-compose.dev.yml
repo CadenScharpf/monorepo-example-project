@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+
+  web-app-1:
+    build:
+      target: dev
+    ports:
+      - "${WEB_APP_1_DEBUG_PORT:?err}:${WEB_APP_1_DEBUG_PORT:?err}"
+    volumes:
+      - ./apps/web-app-1/src:/app/apps/web-app-1/src
+      - ./apps/web-app-1/public:/app/apps/web-app-1/public
+      - ./apps/web-app-1/package.json:/app/apps/web-app-1/package.json
+      
+    environment:
+      - NODE_ENV=development

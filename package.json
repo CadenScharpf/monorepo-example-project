@@ -1,0 +1,27 @@
+{
+    "name": "monorepo-example-project",
+    "version": "0.0.0",
+    "private": true,
+    "workspaces": [
+      "packages/*",
+      "apps/*"
+    ],
+    "scripts": {
+      "build": "turbo run build",
+      "clean": "turbo run clean",
+      "dev": "turbo run dev",
+      "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+      "lint": "turbo run lint",
+      "test": "turbo run test"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "prettier": "^3.2.5",
+      "turbo": "^2.0.3"
+    },
+    "packageManager": "pnpm@9.14.4",
+    "engines": {
+      "node": ">=14.0.0",
+      "npm": ">=7.0.0"
+    }
+  }

@@ -1,0 +1,30 @@
+version: "3.8"
+x-extra_hosts: &default-extra_hosts
+  - "${TOP_LEVEL_DOMAIN:?err}:host-gateway"
+
+x-default-cfg: &default-cfg
+  extra_hosts: *default-extra_hosts
+  network_mode: bridge
+  restart: always
+  env_file:
+    - .env
+
+x-common-volumes: &default-volumes
+
+services:
+
+  web-app-1:
+    <<: *default-cfg
+    build:
+      target: runner
+      args: 
+        - PROJECT=web-app-1
+    container_name: ${WEB_APP_1_NAME:?err}
+    ports:
+      - "${WEB_APP_1_PORT:?err}:3000"
+    #volumes:
+    environment:
+      - NODE_ENV=production
+      - PORT=${WEB_APP_1_PORT:?err}
+
+#  ${SERVER_APP_1_NAME:?err}:
