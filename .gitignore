@@ -1,0 +1,53 @@
+# Node modules (managed per package)
+**/node_modules/
+
+# Build outputs
+**/dist/
+**/build/
+**/out/
+
+# Logs
+**/logs
+**/*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Runtime
+.pnpm-store/
+.pnpm-debug.log
+turbo-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE/editor config
+.vscode/
+.idea/
+*.swp
+
+# Coverage
+coverage/
+**/coverage/
+
+# dotenv
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# TypeScript
+**/*.tsbuildinfo
+
+# React
+**/.cache
+**/.parcel-cache
+**/public/static/
+
+# Next.js (if used)
+.next/
+.vercel/
+
+# Turbo-specific
+**/.turbo/
