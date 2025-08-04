@@ -22,7 +22,7 @@ turbo-debug.log
 Thumbs.db
 
 # IDE/editor config
-.vscode/
+#.vscode/
 .idea/
 *.swp
 
