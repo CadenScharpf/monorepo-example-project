@@ -14,7 +14,11 @@
       "lint": "turbo run lint",
       "test": "turbo run test"
     },
-    "dependencies": {},
+    "dependencies": {
+      "turbo": "^2.0.3",
+      "typescript": "^4.9.5",
+      "prettier": "^3.2.5"
+    },
     "devDependencies": {
       "prettier": "^3.2.5",
       "turbo": "^2.0.3"

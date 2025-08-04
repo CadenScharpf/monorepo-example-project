@@ -4,14 +4,27 @@ FROM node:${NODE_VERSION}-alpine as base
 RUN npm install pnpm turbo typescript --global
 RUN pnpm config set store-dir ~/.pnpm-store
 RUN pnpm config set strict-ssl false
+# -----------------------------------------------------------------------------------
+# Uncomment the following lines if you want to use a multi-stage build with a locker and pruner
+# This is useful for CI builds and avoids the need to install nodeJS on the host.
 
+# FROM base AS locker
+# WORKDIR /app
+# COPY . .
+# RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --prefer-offline
+
+# FROM base AS pruner
+# ARG PROJECT
+# WORKDIR /app
+# COPY --from=locker /app ./
+# RUN turbo prune --scope=${PROJECT} --docker
+# -----------------------------------------------------------------------------------
 
 FROM base AS pruner
 ARG PROJECT
 WORKDIR /app
 COPY . .
 RUN turbo prune --scope=${PROJECT} --docker
-
 
 FROM base AS builder
 ARG PROJECT
@@ -23,7 +36,7 @@ COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 # First install the dependencies (as they change less often)
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile --prefer-offline
 # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 RUN turbo build --filter=${PROJECT}
@@ -37,8 +50,6 @@ ARG PROJECT
 ENV PROJECT=${PROJECT}
 WORKDIR /app
 COPY --from=builder --chown=node:node /app .
-#RUN /bin/sh -c 'if [ -d "/app/apps/${PROJECT}/public" ]; then cp -r /app/apps/${PROJECT}/public /app/public; fi'
-#RUN npm install -g serve
 CMD turbo run ${PROJECT}#start --env-mode=loose
 
 FROM base AS dev
@@ -51,7 +62,7 @@ WORKDIR /app
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --prefer-offline
 COPY --from=pruner /app/out/full/ .
 WORKDIR /app/apps/${PROJECT}
 #CMD npm run dev
