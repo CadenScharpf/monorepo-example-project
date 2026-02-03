@@ -6,11 +6,24 @@ services:
     build:
       target: dev
     ports:
-      - "${WEB_APP_1_DEBUG_PORT:?err}:3001"
+      - "${WEB_APP_1_DEBUG_PORT:?err}:9229"
     volumes:
       - ./apps/web-app-1/src:/app/apps/web-app-1/src
       - ./apps/web-app-1/public:/app/apps/web-app-1/public
       - ./apps/web-app-1/package.json:/app/apps/web-app-1/package.json
+    environment:
+      - NODE_ENV=development
       
+  server-app-1:
+    build:
+      target: dev
+    ports:
+      - "${SERVER_APP_1_DEBUG_PORT:?err}:9229"
+    volumes:
+      - ./apps/server-app-1/src:/app/apps/server-app-1/src
+      - ./apps/server-app-1/public:/app/apps/server-app-1/public
+      - ./apps/server-app-1/package.json:/app/apps/server-app-1/package.json
+      - ./apps/server-app-1/start.sh:/app/apps/server-app-1/start.sh
+
     environment:
       - NODE_ENV=development

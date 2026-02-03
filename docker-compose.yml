@@ -8,8 +8,6 @@ x-default-cfg: &default-cfg
   restart: always
   env_file:
     - .env
-  environment:
-    - PORT=3000
 
 x-common-volumes: &default-volumes
 
@@ -23,7 +21,7 @@ services:
         - PROJECT=web-app-1
     container_name: ${WEB_APP_1_NAME:?err}
     ports:
-      - "${WEB_APP_1_PORT:?err}:3000"
+      - "${WEB_APP_1_PORT:?err}:80"
     #volumes:
     environment:
       - NODE_ENV=production
@@ -36,7 +34,7 @@ services:
         - PROJECT=server-app-1
     container_name: ${SERVER_APP_1_NAME:?err}
     ports:
-      - "${SERVER_APP_1_PORT:?err}:3000"
+      - "${SERVER_APP_1_PORT:?err}:80"
     environment:
       - NODE_ENV=production
 
