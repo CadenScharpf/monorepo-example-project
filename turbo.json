@@ -1,33 +1,40 @@
 {
-    "$schema": "https://turbo.build/schema.json",
-    "tasks": {
-      "build": {
-        "inputs": ["$TURBO_DEFAULT$", ".env*"],
-        "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
-        "dependsOn": ["^build", "^db:generate"],
-        "env": ["NEXT_PUBLIC_API_HOST"]
-      },
-      "start": {
-        "inputs": ["$TURBO_DEFAULT$", ".env*"],
-        "cache": false,
-        "persistent": true
-      },
-      "db:generate": {
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
+      "dependsOn": ["^build", "^db:generate"],
+      "env": ["NEXT_PUBLIC_API_HOST", "DATABASE_URL", "TOP_LEVEL_DOMAIN", "PROTOCOL"]
+    },
+    "start": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
       "cache": false
-      },
-      "test": {
-        "outputs": ["coverage/**"],
-        "dependsOn": []
-      },
-      "lint": {
-        "dependsOn": ["^build"]
-      },
-      "dev": {
-        "cache": false,
-        "persistent": true
-      },
-      "clean": {
-        "cache": false
-      }
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true // This is necessary to interact with the CLI and assign names to your database migrations.
+    },
+    "db:deploy": {
+      "cache": false
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
     }
   }
+}

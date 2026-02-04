@@ -4,12 +4,17 @@ x-extra_hosts: &default-extra_hosts
 
 x-default-cfg: &default-cfg
   extra_hosts: *default-extra_hosts
-  network_mode: bridge
+  #network_mode: bridge
   restart: always
   env_file:
     - .env
 
-x-common-volumes: &default-volumesrrrr
+x-common-volumes: &default-volumes
+
+
+networks:
+  appnet:
+  dbnet:
 
 services:
 
@@ -32,6 +37,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks: [dbnet]
 
 
   web-app-1:
@@ -46,6 +52,7 @@ services:
     #volumes:
     environment:
       - NODE_ENV=production
+    networks: [appnet]
 
   server-app-1:
     <<: *default-cfg
@@ -58,5 +65,6 @@ services:
       - "${SERVER_APP_1_PORT:?err}:80"
     environment:
       - NODE_ENV=production
+    networks: [appnet, dbnet]
 
 #  ${SERVER_APP_1_NAME:?err}:
