@@ -32,7 +32,8 @@
         { "label": "All", "value": "" },
         "web-app-1",
         "server-app-1",
-        "nginx"
+        "nginx",
+        "postgres"
       ]
     },
     {

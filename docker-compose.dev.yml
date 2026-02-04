@@ -23,7 +23,6 @@ services:
       - ./apps/server-app-1/src:/app/apps/server-app-1/src
       - ./apps/server-app-1/public:/app/apps/server-app-1/public
       - ./apps/server-app-1/package.json:/app/apps/server-app-1/package.json
-      - ./apps/server-app-1/start.sh:/app/apps/server-app-1/start.sh
 
     environment:
       - NODE_ENV=development
