@@ -37,6 +37,10 @@ coverage/
 # .env.test
 # .env.production
 
+# Node modules and build outputs
+**/node_modules/
+**/dist/
+
 # TypeScript
 **/*.tsbuildinfo
 

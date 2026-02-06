@@ -12,9 +12,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@repo/typescript-config": "workspace:*",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "@repo/database": "file:../../packages/database"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
