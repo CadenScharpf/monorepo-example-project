@@ -1,0 +1,43 @@
+# Version control
+.git
+.gitignore
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependency directories
+node_modules
+**/node_modules
+.pnpm-store
+
+# Build and generated output
+dist
+**/dist
+build
+**/build
+out
+**/out
+.next
+**/.next
+.turbo
+**/.turbo
+coverage
+**/coverage
+**/*.tsbuildinfo
+
+# Runtime data that should not be sent to Docker builds
+database/postgresql
+
+# Logs and local tooling state
+logs
+**/logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+turbo-debug.log
+.DS_Store
+Thumbs.db
+.idea
+.vscode
