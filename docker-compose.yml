@@ -28,7 +28,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:?err}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
     volumes:
       - "${DB_PERSISTENCE_PATH:?err}:/var/lib/postgresql/data"
     healthcheck:
