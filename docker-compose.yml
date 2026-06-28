@@ -38,7 +38,6 @@ services:
       retries: 10
     networks: [dbnet]
 
-
   web-app-1:
     <<: *default-cfg
     build:
