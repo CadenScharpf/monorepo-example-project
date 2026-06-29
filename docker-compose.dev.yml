@@ -24,6 +24,12 @@ services:
       - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
       - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
       - ./turbo.json:/app/turbo.json
+      - /app/node_modules
+      - /app/apps/web-app-1/node_modules
+      - /app/packages/database/node_modules
+      - /app/packages/logger/node_modules
+      - /app/packages/typescript-config/node_modules
+      - /app/packages/ui/node_modules
     environment:
       - NODE_ENV=development
       
@@ -39,6 +45,12 @@ services:
       - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
       - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
       - ./turbo.json:/app/turbo.json
+      - /app/node_modules
+      - /app/apps/server-app-1/node_modules
+      - /app/packages/database/node_modules
+      - /app/packages/logger/node_modules
+      - /app/packages/typescript-config/node_modules
+      - /app/packages/ui/node_modules
 
     environment:
       - NODE_ENV=development
