@@ -22,7 +22,7 @@
   "scripts": {
     "start": "serve -s build --listen 80 --cors",
     "dev-old": "PORT=80 node --inspect=0.0.0.0:9229 node_modules/react-scripts/scripts/start.js",
-    "dev": "PORT=80 CHOKIDAR_USEPOLLING=true WDS_SOCKET_PORT=0 node --inspect=0.0.0.0:9229 node_modules/react-scripts/scripts/start.js",
+    "dev": "PORT=80 PUBLIC_URL=/$WEB_APP_1_BASE_PATH WDS_SOCKET_PATH=/$WEB_APP_1_BASE_PATH/ws CHOKIDAR_USEPOLLING=true WDS_SOCKET_PORT=0 node --inspect=0.0.0.0:9229 node_modules/react-scripts/scripts/start.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

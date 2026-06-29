@@ -10,13 +10,13 @@ client_max_body_size 2G;
 server {
     listen 80;
     listen [::]:80;
-    server_name ${TOP_LEVEL_DOMAIN};
+    server_name ${REPO_HOST};
     resolver 127.0.0.11 ipv6=off valid=10s;
 
     set $web_app_1 http://${WEB_APP_1_NAME}:80;
     set $server_app_1 http://${SERVER_APP_1_NAME}:80;
 
-    location /${WEB_APP_1_NAME}/ {
+    location /${WEB_APP_1_BASE_PATH}/ {
         proxy_pass $web_app_1/;
         proxy_http_version 1.1;
         proxy_set_header Host              $host;
@@ -29,7 +29,7 @@ server {
         proxy_read_timeout 3600;
     }
 
-    location /${SERVER_APP_1_NAME}/ {
+    location /${SERVER_APP_1_BASE_PATH}/ {
         proxy_pass $server_app_1/;
         proxy_http_version 1.1;
         proxy_set_header Host              $host;

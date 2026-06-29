@@ -38,7 +38,9 @@ Takeaway:
 
 Container-to-container traffic should use Docker networking and Compose service DNS. Browser-facing links should use a single published HTTP entrypoint.
 
-The current framework uses nginx as that entrypoint. It publishes the host HTTP port and routes path-based URLs to internal services such as `web-app-1` and `server-app-1`.
+The current framework uses nginx as that entrypoint. It publishes the host HTTP port and routes path-based URLs to internal services such as `web-app-1` and `server-app-1`. The public contract is split into two parts: a repo host such as `mono-repo-1.cadenscharpf.com`, and app base paths such as `/web-app-1`.
+
+For local development, prefer a high host port such as `8080` instead of `80` when the stack is being accessed from Windows through WSL or Docker Desktop. This avoids conflicts and makes the browser entrypoint explicit.
 
 Takeaway:
 
@@ -46,6 +48,7 @@ Takeaway:
 - Do not make browser URLs depend on Docker service DNS.
 - Expose one browser-facing gateway when multiple apps need to link to each other.
 - Treat `host.docker.internal` as an exception, not the default design.
+- Parameterize the repo host separately from each app base path so multiple monorepos can coexist behind one external reverse proxy.
 
 ### Environment Variables Should Reflect Real Boundaries
 
@@ -55,7 +58,7 @@ Examples from this framework:
 
 - `DATABASE_URL` uses `postgres:5432` for container-internal access.
 - `LOCAL_DATABASE_URL` exists separately for host-side access when needed.
-- Public app URLs are path-based under the nginx entrypoint rather than app-specific published ports.
+- Public app URLs are built from a repo host plus app base paths, rather than app-specific published ports.
 
 Takeaway:
 
@@ -129,6 +132,17 @@ Why:
 - internal app topology can change without changing public links
 - reverse proxy rules map cleanly to production patterns
 
+### Separate Repo Identity From App Identity
+
+If multiple monorepos may run on the same machine or behind the same public domain, the repo itself needs a public identity that is distinct from the apps inside it.
+
+Why:
+
+- different repos can use different hosts such as `mono-repo-1.cadenscharpf.com` and `mono-repo-2.cadenscharpf.com`
+- apps inside each repo can still use stable paths such as `/web-app-1`
+- the external reverse proxy only needs to know which host maps to which monorepo nginx
+- internal monorepo routing stays self-contained
+
 ### Keep Host Escape Hatches Explicit
 
 Default `host-gateway` mappings were removed. If a service truly needs host access later, that exception should be added deliberately and only to the service that needs it.
@@ -159,6 +173,13 @@ If this repository is used as the basis for a new monorepo, preserve these defau
 4. Use one published browser entrypoint for cross-app navigation.
 5. Keep host-specific behavior isolated and explicit.
 6. Treat workspace tooling, debug wiring, and hot reload as first-class design requirements.
+
+When running multiple monorepos behind one external edge proxy, give each repo its own host and let the monorepo-local nginx route app paths inside that host. Example URLs:
+
+- `http://mono-repo-1.cadenscharpf.com/web-app-1`
+- `http://mono-repo-2.cadenscharpf.com/web-app-1`
+
+For a concrete Cloudflare plus host-nginx setup, see `docs/multi-monorepo-host-routing.md`.
 
 ## Summary
 
