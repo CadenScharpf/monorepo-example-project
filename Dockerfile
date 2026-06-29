@@ -57,7 +57,7 @@ ARG PROJECT
 ENV PROJECT=${PROJECT}
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN apk update
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat procps
 WORKDIR /app
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml

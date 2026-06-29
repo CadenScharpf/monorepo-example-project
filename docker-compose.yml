@@ -72,6 +72,7 @@ services:
     container_name: ${SERVER_APP_1_NAME:?err}
     environment:
       - NODE_ENV=production
+      - PORT=80
     networks: [appnet, dbnet]
 
 #  ${SERVER_APP_1_NAME:?err}:

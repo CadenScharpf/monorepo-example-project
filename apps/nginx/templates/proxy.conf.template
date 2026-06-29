@@ -11,13 +11,18 @@ server {
     listen 80;
     listen [::]:80;
     server_name ${REPO_HOST};
+    absolute_redirect off;
     resolver 127.0.0.11 ipv6=off valid=10s;
 
     set $web_app_1 http://${WEB_APP_1_NAME}:80;
     set $server_app_1 http://${SERVER_APP_1_NAME}:80;
 
+    location = /${WEB_APP_1_BASE_PATH} {
+        return 301 /${WEB_APP_1_BASE_PATH}/;
+    }
+
     location /${WEB_APP_1_BASE_PATH}/ {
-        proxy_pass $web_app_1/;
+        proxy_pass $web_app_1;
         proxy_http_version 1.1;
         proxy_set_header Host              $host;
         proxy_set_header X-Real-IP         $remote_addr;
@@ -29,8 +34,13 @@ server {
         proxy_read_timeout 3600;
     }
 
+    location = /${SERVER_APP_1_BASE_PATH} {
+        return 301 /${SERVER_APP_1_BASE_PATH}/;
+    }
+
     location /${SERVER_APP_1_BASE_PATH}/ {
-        proxy_pass $server_app_1/;
+        rewrite ^/${SERVER_APP_1_BASE_PATH}/?(.*)$ /$1 break;
+        proxy_pass $server_app_1;
         proxy_http_version 1.1;
         proxy_set_header Host              $host;
         proxy_set_header X-Real-IP         $remote_addr;
