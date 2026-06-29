@@ -15,6 +15,9 @@ networks:
   appnet:
   dbnet:
 
+volumes:
+  postgres-data:
+
 services:
 
   postgres:
@@ -30,7 +33,7 @@ services:
     ports:
       - "${POSTGRES_HOST_PORT:-5432}:5432"
     volumes:
-      - "${DB_PERSISTENCE_PATH:?err}:/var/lib/postgresql/data"
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s

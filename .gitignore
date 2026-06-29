@@ -17,6 +17,9 @@ pnpm-debug.log*
 .pnpm-debug.log
 turbo-debug.log
 
+# Local database persistence
+database/postgresql/
+
 # OS
 .DS_Store
 Thumbs.db
@@ -49,3 +52,4 @@ coverage/
 
 # Turbo-specific
 **/.turbo/
+

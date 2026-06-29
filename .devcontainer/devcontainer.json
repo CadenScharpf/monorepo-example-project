@@ -1,0 +1,41 @@
+{
+  "name": "Monorepo Docker Workspace",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile",
+    "target": "workspace"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "remoteUser": "root",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=${localWorkspaceFolderBasename}-pnpm-store,target=/root/.pnpm-store,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-root,target=${localWorkspaceFolder}/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-server-app-1,target=${localWorkspaceFolder}/apps/server-app-1/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-web-app-1,target=${localWorkspaceFolder}/apps/web-app-1/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-database,target=${localWorkspaceFolder}/packages/database/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-eslint-config,target=${localWorkspaceFolder}/packages/eslint-config/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-jest-presets,target=${localWorkspaceFolder}/packages/jest-presets/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-logger,target=${localWorkspaceFolder}/packages/logger/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-typescript-config,target=${localWorkspaceFolder}/packages/typescript-config/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-ui,target=${localWorkspaceFolder}/packages/ui/node_modules,type=volume"
+  ],
+  "postCreateCommand": "pnpm install --frozen-lockfile --prefer-offline",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "Prisma.prisma"
+      ],
+      "settings": {
+        "eslint.workingDirectories": [
+          { "mode": "auto" }
+        ],
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  }
+}
