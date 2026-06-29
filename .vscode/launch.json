@@ -17,6 +17,19 @@
                 "restart": true,
                 "localRoot": "${workspaceFolder}/apps/web-app-1/src",
                 "remoteRoot": "/app/apps/web-app-1/src",
+            },
+        {
+                "name": "Attach to Server App 1",
+                "type": "node",
+                "request": "attach",
+                "port": 3028,
+                "skipFiles": [
+                    "<node_internals>/**"
+                ],
+                "sourceMaps": true,
+                "restart": true,
+                "localRoot": "${workspaceFolder}/apps/server-app-1/src",
+                "remoteRoot": "/app/apps/server-app-1/src"
             }
     ]
 }

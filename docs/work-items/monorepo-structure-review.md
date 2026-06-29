@@ -18,19 +18,19 @@ Project direction: local development and production deployments should both run 
 
 ### Medium Priority
 
-- **Task 5:** `extra_hosts` maps `${TOP_LEVEL_DOMAIN}` to `host-gateway`. With Docker-only development, containers should usually talk through Compose service DNS and internal networks. Keep host-gateway only as an explicit dev escape hatch, preferably under a dedicated alias like `host.docker.internal`.
-- **Task 6:** The nginx template proxies to `host.docker.internal`, but there is no nginx service in Compose, and the current `extra_hosts` does not define `host.docker.internal`. If path-based routing is part of the Docker runtime story, add nginx as a real Compose service; otherwise remove the unused template and task references.
-- **Task 7:** Dev app-container bind mounts only app `src`, `public`, and `package.json`. The dev container gives the IDE access to the whole monorepo and dependency volumes, but runtime hot reload should still cover `apps/*`, `packages/*`, workspace config, Prisma files, and generated output without requiring manual app-container rebuilds for shared package changes.
-- **Task 8:** Debug wiring is inconsistent. Docker-based debugging should expose stable inspect ports, and Node processes that need debugger attach should listen on `0.0.0.0:9229` inside the container.
+- **Task 5 (Addressed):** The default `${TOP_LEVEL_DOMAIN}` to `host-gateway` mapping has been removed from Compose. App containers now rely on Compose service DNS on Docker networks for internal traffic, while browser-facing links continue to go through the published nginx entrypoint. No service currently requires host access; if one does in the future, add `host.docker.internal:host-gateway` only to that specific service as an explicit escape hatch.
+- **Task 6 (Addressed):** Nginx is now a real Compose service on `appnet`, publishes the browser-facing HTTP port, and proxies path-based routes to service DNS names such as `web-app-1:80` and `server-app-1:80`. This preserves clean browser URLs like `http://localhost/web-app-1/` while keeping app-to-app networking internal.
+- **Task 7 (Addressed):** Dev app containers now bind mount the full `apps/` and `packages/` trees plus root workspace config files (`package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, and `turbo.json`). This keeps Docker-based hot reload responsive to app code, shared package changes, Prisma files, and workspace config updates without requiring manual rebuilds for routine edit cycles.
+- **Task 8 (Addressed):** Debug wiring now exposes stable inspect ports for both dev app containers, and the active Node dev commands bind the inspector to `0.0.0.0:9229` inside the container. VS Code launch settings include attach targets for both apps on the published debug ports.
 - **Task 9 (Addressed):** `build.dev.sh` no longer runs host `pnpm install` or broad Docker volume pruning. Project-scoped cleanup is available through `clean.dev.sh`.
 
 ### Low Priority
 
-- **Task 10:** Compose `version` is obsolete in both `docker-compose.yml` and `docker-compose.dev.yml`; `docker compose config --quiet` warns about this.
+- **Task 10 (Addressed):** The obsolete Compose `version` fields have been removed from `docker-compose.yml` and `docker-compose.dev.yml`, so `docker compose config --quiet` no longer warns about schema version keys.
 
 ## Overall Feedback
 
-The basic shape is good: apps live under `apps/`, shared code lives under `packages/`, Turborepo coordinates tasks, and the Compose networks separate app traffic from database traffic. Since the project direction is Docker-only local development and Docker-based production runtime, the main area to tighten is the command surface: scripts, docs, debugging, database tasks, dev-container tooling, and production deployment should all assume Docker is the only local prerequisite.
+The basic shape is good: apps live under `apps/`, shared code lives under `packages/`, Turborepo coordinates tasks, and the Compose networks separate app traffic from database traffic. Since the project direction is Docker-only local development and Docker-based production runtime, the main area to tighten is the command surface: scripts, docs, debugging, database tasks, dev-container tooling, networking, and production deployment should all assume Docker is the only local prerequisite. Use Docker networks for container-to-container traffic, and use a single browser-facing entrypoint such as nginx for links that need to work in webpages.
 
 ## Recommended Order
 

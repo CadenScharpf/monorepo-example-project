@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   workspace:
@@ -20,9 +18,12 @@ services:
     ports:
       - "${WEB_APP_1_DEBUG_PORT:?err}:9229"
     volumes:
-      - ./apps/web-app-1/src:/app/apps/web-app-1/src
-      - ./apps/web-app-1/public:/app/apps/web-app-1/public
-      - ./apps/web-app-1/package.json:/app/apps/web-app-1/package.json
+      - ./apps:/app/apps
+      - ./packages:/app/packages
+      - ./package.json:/app/package.json
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
+      - ./turbo.json:/app/turbo.json
     environment:
       - NODE_ENV=development
       
@@ -32,9 +33,12 @@ services:
     ports:
       - "${SERVER_APP_1_DEBUG_PORT:?err}:9229"
     volumes:
-      - ./apps/server-app-1/src:/app/apps/server-app-1/src
-      - ./apps/server-app-1/public:/app/apps/server-app-1/public
-      - ./apps/server-app-1/package.json:/app/apps/server-app-1/package.json
+      - ./apps:/app/apps
+      - ./packages:/app/packages
+      - ./package.json:/app/package.json
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
+      - ./turbo.json:/app/turbo.json
 
     environment:
       - NODE_ENV=development
