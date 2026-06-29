@@ -2,6 +2,18 @@ version: "3.8"
 
 services:
 
+  workspace:
+    build:
+      context: .
+      target: workspace
+    profiles:
+      - tools
+    env_file:
+      - .env
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+
   web-app-1:
     build:
       target: dev

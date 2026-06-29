@@ -20,6 +20,18 @@
         "isDefault": false
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Clean:Dev",
+      "type": "shell",
+      "command": "${workspaceFolder}/clean.dev.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean:Dev Volumes",
+      "type": "shell",
+      "command": "${workspaceFolder}/clean.dev.sh --volumes",
+      "problemMatcher": []
     }
   ],
 

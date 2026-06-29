@@ -69,3 +69,12 @@ WORKDIR /app/apps/${PROJECT}
 #RUN turbo db:generate
 #RUN turbo build --filter=${PROJECT}
 CMD turbo watch ${PROJECT}#dev --env-mode=loose
+
+FROM base AS workspace
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY . .
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile --prefer-offline
+CMD ["sh"]
