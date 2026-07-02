@@ -4,54 +4,8 @@ services:
     build:
       context: .
       target: workspace
-    profiles:
-      - tools
     env_file:
       - .env
     working_dir: /app
     environment:
       - NODE_ENV=development
-
-  web-app-1:
-    build:
-      target: dev
-    ports:
-      - "${WEB_APP_1_DEBUG_PORT:?err}:9229"
-    volumes:
-      - ./apps:/app/apps
-      - ./packages:/app/packages
-      - ./package.json:/app/package.json
-      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
-      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
-      - ./turbo.json:/app/turbo.json
-      - /app/node_modules
-      - /app/apps/web-app-1/node_modules
-      - /app/packages/database/node_modules
-      - /app/packages/logger/node_modules
-      - /app/packages/typescript-config/node_modules
-      - /app/packages/ui/node_modules
-    environment:
-      - NODE_ENV=development
-      
-  server-app-1:
-    build:
-      target: dev
-    ports:
-      - "${SERVER_APP_1_DEBUG_PORT:?err}:9229"
-    volumes:
-      - ./apps:/app/apps
-      - ./packages:/app/packages
-      - ./package.json:/app/package.json
-      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
-      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
-      - ./turbo.json:/app/turbo.json
-      - /app/node_modules
-      - /app/apps/server-app-1/node_modules
-      - /app/packages/database/node_modules
-      - /app/packages/logger/node_modules
-      - /app/packages/typescript-config/node_modules
-      - /app/packages/ui/node_modules
-
-    environment:
-      - NODE_ENV=development
-      - PORT=80

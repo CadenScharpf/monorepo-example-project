@@ -1,27 +1,32 @@
 {
   "name": "Monorepo Docker Workspace",
-  "build": {
-    "context": "..",
-    "dockerfile": "../Dockerfile",
-    "target": "workspace"
-  },
-  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
-  "workspaceFolder": "${localWorkspaceFolder}",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "../docker-compose.dev.yml"
+  ],
+  "service": "workspace",
+  "runServices": [
+    "postgres"
+  ],
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/app",
   "remoteUser": "root",
   "mounts": [
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
     "source=${localWorkspaceFolderBasename}-pnpm-store,target=/root/.pnpm-store,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-root,target=${localWorkspaceFolder}/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-server-app-1,target=${localWorkspaceFolder}/apps/server-app-1/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-web-app-1,target=${localWorkspaceFolder}/apps/web-app-1/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-database,target=${localWorkspaceFolder}/packages/database/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-eslint-config,target=${localWorkspaceFolder}/packages/eslint-config/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-jest-presets,target=${localWorkspaceFolder}/packages/jest-presets/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-logger,target=${localWorkspaceFolder}/packages/logger/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-typescript-config,target=${localWorkspaceFolder}/packages/typescript-config/node_modules,type=volume",
-    "source=${localWorkspaceFolderBasename}-node-modules-ui,target=${localWorkspaceFolder}/packages/ui/node_modules,type=volume"
+    "source=${localWorkspaceFolderBasename}-node-modules-root,target=/app/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-server-app-1,target=/app/apps/server-app-1/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-web-app-1,target=/app/apps/web-app-1/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-database,target=/app/packages/database/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-eslint-config,target=/app/packages/eslint-config/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-jest-presets,target=/app/packages/jest-presets/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-logger,target=/app/packages/logger/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-typescript-config,target=/app/packages/typescript-config/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-node-modules-ui,target=/app/packages/ui/node_modules,type=volume"
   ],
-  "postCreateCommand": "pnpm install --frozen-lockfile --prefer-offline",
+  "postCreateCommand": "corepack enable && pnpm install",
+  "postStartCommand": "bash -lc 'if ! pgrep -f \"turbo run dev\" >/dev/null; then nohup pnpm dev >/tmp/pnpm-dev.log 2>&1 & fi'",
   "customizations": {
     "vscode": {
       "extensions": [

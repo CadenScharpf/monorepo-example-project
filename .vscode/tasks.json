@@ -2,13 +2,39 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build:Dev",
+      "label": "Dev:Run",
       "type": "shell",
-      "command": "${workspaceFolder}/build.dev.sh ${input:selectService}",
+      "command": "pnpm dev",
+      "isBackground": true,
       "group": {
         "kind": "build",
         "isDefault": true
       },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev:Stop",
+      "type": "shell",
+      "command": "pkill -f 'turbo run dev' || true",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB:Logs",
+      "type": "shell",
+      "command": "docker compose --env-file .env -f docker-compose.yml logs -f postgres",
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev:Healthcheck",
+      "type": "shell",
+      "command": "bash -lc 'set -euo pipefail; WEB_BASE=${WEB_APP_1_BASE_PATH:-web-app-1}; WEB_PORT=${WEB_APP_1_PORT:-80}; SERVER_PORT=${SERVER_APP_1_PORT:-3000}; web_ok=0; server_ok=0; if wget -q --spider \"http://localhost:${WEB_PORT}/${WEB_BASE}/\"; then echo \"[ok] web app: http://localhost:${WEB_PORT}/${WEB_BASE}/\"; web_ok=1; elif wget -q --spider \"http://localhost:18080/${WEB_BASE}/\"; then echo \"[ok] web app fallback: http://localhost:18080/${WEB_BASE}/\"; web_ok=1; else echo \"[fail] web app not reachable\"; fi; if wget -q --spider \"http://localhost:${SERVER_PORT}/health\"; then echo \"[ok] server api: http://localhost:${SERVER_PORT}/health\"; server_ok=1; elif wget -q --spider \"http://localhost:18081/health\"; then echo \"[ok] server api fallback: http://localhost:18081/health\"; server_ok=1; else echo \"[fail] server api not reachable\"; fi; [[ $web_ok -eq 1 && $server_ok -eq 1 ]]'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev:Logs",
+      "type": "shell",
+      "command": "bash -lc 'if [[ -f /tmp/pnpm-dev.log ]]; then tail -n 200 -f /tmp/pnpm-dev.log; else echo \"/tmp/pnpm-dev.log not found yet. Start the devcontainer or run Dev:Run first.\"; exit 1; fi'",
+      "isBackground": true,
       "problemMatcher": []
     },
     {
@@ -19,18 +45,6 @@
         "kind": "build",
         "isDefault": false
       },
-      "problemMatcher": []
-    },
-    {
-      "label": "Clean:Dev",
-      "type": "shell",
-      "command": "${workspaceFolder}/clean.dev.sh",
-      "problemMatcher": []
-    },
-    {
-      "label": "Clean:Dev Volumes",
-      "type": "shell",
-      "command": "${workspaceFolder}/clean.dev.sh --volumes",
       "problemMatcher": []
     }
   ],
@@ -47,12 +61,6 @@
         "nginx",
         "postgres"
       ]
-    },
-    {
-      "id": "selectEnv",
-      "type": "pickString",
-      "description": "What environment?",
-      "options": ["production", "uat", "staging", "local", "all"]
     }
   ]
 }

@@ -40,7 +40,7 @@ Container-to-container traffic should use Docker networking and Compose service 
 
 The current framework uses nginx as that entrypoint. It publishes the host HTTP port and routes path-based URLs to internal services such as `web-app-1` and `server-app-1`. The public contract is split into two parts: a repo host such as `mono-repo-1.cadenscharpf.com`, and app base paths such as `/web-app-1`.
 
-For local development, prefer a high host port such as `8080` instead of `80` when the stack is being accessed from Windows through WSL or Docker Desktop. This avoids conflicts and makes the browser entrypoint explicit.
+For local development, prefer a high host port (for example `PORT=18080`) instead of `80` when the stack is being accessed from Windows through WSL or Docker Desktop. This avoids conflicts and makes the browser entrypoint explicit.
 
 Takeaway:
 
@@ -82,13 +82,16 @@ Takeaway:
 
 ### Development
 
-Use the Docker wrappers as the primary interface:
+Use the devcontainer lifecycle as the primary interface:
 
-- `build.dev.sh` starts the development stack.
-- `clean.dev.sh` removes the project-scoped dev resources.
-- `docker.workspace.sh` runs workspace commands inside the Docker `workspace` service.
+- `runServices` starts `postgres`.
+- `postCreateCommand` runs `corepack enable && pnpm install`.
+- `postStartCommand` runs `pnpm dev` so Turbo starts app dev processes.
+- `shutdownAction: stopCompose` stops Compose services when the devcontainer stops.
 
 This means common operations such as installing dependencies, running Prisma commands, invoking Turborepo tasks, or using PNPM should happen through the workspace container rather than on the host.
+
+For the current devcontainer startup model and command reference, see `docs/repo/dev-workflow-modes.md`.
 
 ### Editing and Debugging
 

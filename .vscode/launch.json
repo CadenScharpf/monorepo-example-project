@@ -5,68 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach: Web App 1 (Docker Pipe)",
+            "name": "Attach: Web App 1",
             "type": "node",
             "request": "attach",
             "address": "localhost",
-            "port": 9229,
-            "protocol": "inspector",
-            "restart": true,
-            "timeout": 120000,
-            "trace": true,
-            "sourceMaps": true,
-            "smartStep": true,
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "localRoot": "${workspaceFolder}/apps/web-app-1",
-            "remoteRoot": "/app/apps/web-app-1",
-            "pipeTransport": {
-                "pipeProgram": "docker",
-                "pipeArgs": [
-                    "exec",
-                    "-i",
-                    "web-app-1"
-                ],
-                "debuggerPath": "/usr/local/bin/node",
-                "pipeCwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "name": "Attach: Server App 1 (Docker Pipe)",
-            "type": "node",
-            "request": "attach",
-            "address": "localhost",
-            "port": 9229,
-            "protocol": "inspector",
-            "restart": true,
-            "timeout": 120000,
-            "trace": true,
-            "sourceMaps": true,
-            "smartStep": true,
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "localRoot": "${workspaceFolder}/apps/server-app-1",
-            "remoteRoot": "/app/apps/server-app-1",
-            "pipeTransport": {
-                "pipeProgram": "docker",
-                "pipeArgs": [
-                    "exec",
-                    "-i",
-                    "server-app-1"
-                ],
-                "debuggerPath": "/usr/local/bin/node",
-                "pipeCwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "name": "Attach: Web App 1 (Host Port)",
-            "type": "node",
-            "request": "attach",
-            "address": "host.docker.internal",
             "port": 19226,
-            "protocol": "inspector",
             "restart": true,
             "timeout": 120000,
             "trace": true,
@@ -75,16 +18,14 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "localRoot": "${workspaceFolder}/apps/web-app-1",
-            "remoteRoot": "/app/apps/web-app-1"
+            "localRoot": "${workspaceFolder}/apps/web-app-1"
         },
         {
-            "name": "Attach: Server App 1 (Host Port)",
+            "name": "Attach: Server App 1",
             "type": "node",
             "request": "attach",
-            "address": "host.docker.internal",
+            "address": "localhost",
             "port": 19228,
-            "protocol": "inspector",
             "restart": true,
             "timeout": 120000,
             "trace": true,
@@ -93,64 +34,11 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "localRoot": "${workspaceFolder}/apps/server-app-1",
-            "remoteRoot": "/app/apps/server-app-1"
-        },
-        {
-            "name": "Attach: Web App 1 (Pick Process in Container)",
-            "type": "node",
-            "request": "attach",
-            "processId": "${command:PickProcess}",
-            "restart": true,
-            "timeout": 120000,
-            "trace": true,
-            "sourceMaps": true,
-            "smartStep": true,
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "localRoot": "${workspaceFolder}/apps/web-app-1",
-            "remoteRoot": "/app/apps/web-app-1",
-            "pipeTransport": {
-                "pipeProgram": "docker",
-                "pipeArgs": [
-                    "exec",
-                    "-i",
-                    "web-app-1"
-                ],
-                "debuggerPath": "/usr/local/bin/node",
-                "pipeCwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "name": "Attach: Server App 1 (Pick Process in Container)",
-            "type": "node",
-            "request": "attach",
-            "processId": "${command:PickProcess}",
-            "restart": true,
-            "timeout": 120000,
-            "trace": true,
-            "sourceMaps": true,
-            "smartStep": true,
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "localRoot": "${workspaceFolder}/apps/server-app-1",
-            "remoteRoot": "/app/apps/server-app-1",
-            "pipeTransport": {
-                "pipeProgram": "docker",
-                "pipeArgs": [
-                    "exec",
-                    "-i",
-                    "server-app-1"
-                ],
-                "debuggerPath": "/usr/local/bin/node",
-                "pipeCwd": "${workspaceFolder}"
-            }
+            "localRoot": "${workspaceFolder}/apps/server-app-1"
         },
         {
             "name": "Launch Browser: Web App 1",
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "url": "http://localhost:18080/web-app-1/",
             "webRoot": "${workspaceFolder}/apps/web-app-1/src"
@@ -160,8 +48,8 @@
         {
             "name": "Debug: Web + Server",
             "configurations": [
-                "Attach: Web App 1 (Docker Pipe)",
-                "Attach: Server App 1 (Docker Pipe)"
+                "Attach: Web App 1",
+                "Attach: Server App 1"
             ]
         }
     ]
